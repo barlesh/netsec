@@ -16,5 +16,5 @@ sockout = socket.socket(socket.AF_INET,  # Internet
 while True:
     data, addr = sockin.recvfrom(2048) # buffer size is 1024 bytes
     # print "received message:", data
-    # print "current stream length is" + str(len(data))
+    print "current stream length is" + str(len(data))
     sockout.sendto(data, (UDP_IP_TO_FFMPEG, UDP_PORT_TO_FFMPEG))
