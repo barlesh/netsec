@@ -3,10 +3,10 @@ from Crypto.Cipher import AES
 import wrep
 import sys
 
-UDP_IP_FROM_SENDER = "127.0.0.4"
+UDP_IP_FROM_SENDER = "127.0.0.1"
 UDP_PORT_FROM_SENDER = 5678
 
-UDP_IP_TO_FFMPEG = "127.0.0.3"
+UDP_IP_TO_FFMPEG = "127.0.0.1"
 UDP_PORT_TO_FFMPEG = 9012
 
 decrypt = False

@@ -1,6 +1,15 @@
 import binascii
 import random
 
+buff = "1" * 1472
+
+
+fakeArray = [1] * 1472
+i = 0
+for item in fakeArray:
+    fakeArray[i] = "1" * i
+    i += 1
+
 
 def int2bytes(i):
     hex_string = '%x' % i
@@ -10,23 +19,29 @@ def int2bytes(i):
 #FakePacketSize = 1472
 FakePacketSize = 1472
 
-def fakeAddBuff(data,len1):
-    buff = []
+def fakeBuff(len1):
+    # buff = []
     print "fakeAddBuff:len1 is:", len1
-    for i in range(0,len1):
-        buff.append(random.randint(0, 5000) % 255)
+    #buff = [1]*len1
+
+    #for i in range(0,len1):
+    #    buff.append(random.randint(0, 5000) % 255)
     print "fakeAddBuff: bufer len is " + str(len(buff))
-    return data + "".join(map(chr, buff))
+    return fakeArray[len1]
+    #return data + "".join(map(chr, buff))
+    # s = data + buff
+    # s = s[:1472]
+    # return s
 
 def fakeWrap(data):
     len1 = len(data)
-    print "fakeWrap data en is:" + str(len1)
+    #print "fakeWrap data en is:" + str(len1)
     if len1 == FakePacketSize:
-        print "packet size == FakePacketSize"
+    #    print "packet size == FakePacketSize"
         return data
     strlen = "0000"
     if (len1 < FakePacketSize):
-        fake_buff = fakeAddBuff(data,FakePacketSize - len1 - 4)
+        fake_buff = fakeBuff(FakePacketSize - len1 - 4)
     else:
         return  data
 
@@ -43,29 +58,35 @@ def fakeWrap(data):
                 strlen = str(len1)
 
 
-    print "strlen is: " + str(strlen)
-    '|'.join(x.encode('hex') for x in strlen)
+    # print "strlen is: " + str(strlen)
+    # '|'.join(x.encode('hex') for x in strlen)
     strlen2 = int2bytes(len1)
-    print "strlen2 is: " + str(strlen2)
-    '|'.join(x.encode('hex') for x in strlen2)
-    retstr = strlen + fake_buff
-    print "retstr is:"
-    '|'.join(x.encode('hex') for x in retstr)
-    return retstr
+    # print "strlen2 is: " + str(strlen2)
+    #'|'.join(x.encode('hex') for x in strlen2)
+    # retstr = strlen + fake_buff
+    #l = map(chr, fake_buff)
+    #if isinstance(l, basestring):
+    #    print("l is string")
+
+
+    return strlen.join([data,fake_buff ])
+    #print "retstr is:"
+    # '|'.join(x.encode('hex') for x in retstr)
+    # return retstr
 
 
 def fakeUnWrap(fake_data):
     len1 = fake_data[:4]
     #print("fakeUnWrap: len1 is:" + str(len1))
-    l =  '|'.join(x.encode('hex') for x in len1)
+    #l =  '|'.join(x.encode('hex') for x in len1)
     #print l
     try:
         len2 = int(len1)
     except Exception:
-        print "error with number of data len"
+        #print "error with number of data len, meaning packet pf size 1472"
         return fake_data
     real_len = len(fake_data)-len2
-    print "real len is:" + str(real_len)
+    #print "real len is:" + str(real_len)
     data = fake_data[4:real_len]
-    print "len of data is: " + str(len(data))
+    #print "len of data is: " + str(len(data))
     return data
